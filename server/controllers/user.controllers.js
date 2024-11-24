@@ -1,4 +1,7 @@
 import UserModel from '../models/user.model.js'
+import bcryptjs from 'bcryptjs'
+import verifyEmailTemplate from '../utils/verifyEmailTemplate.js'
+
 
 export async function registerUserController(req,res){
     try {
@@ -38,7 +41,7 @@ export async function registerUserController(req,res){
 
         const verifyEmail = await sendEmail({
             sendTo : email,
-            subject : "Verify email from binkeyit",
+            subject : "Verify email from grabvault",
             html : verifyEmailTemplate({
                 name,
                 url : VerifyEmailUrl
