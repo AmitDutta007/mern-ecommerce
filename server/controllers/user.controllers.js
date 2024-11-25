@@ -1,14 +1,15 @@
 import UserModel from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
 import verifyEmailTemplate from '../utils/verifyEmailTemplate.js'
+import sendEmail from '../config/sendEmail.js'
 
 
-export async function registerUserController(req,res){
+export async function registerUser(req,res){
     try {
-        const { name, email , password } = request.body
+        const { name, email , password } = req.body
 
         if(!name || !email || !password){
-            return response.status(400).json({
+            return res.status(400).json({
                 message : "provide email, name, password",
                 error : true,
                 success : false
@@ -18,7 +19,7 @@ export async function registerUserController(req,res){
         const user = await UserModel.findOne({ email })
 
         if(user){
-            return response.json({
+            return res.json({
                 message : "Already register email",
                 error : true,
                 success : false
@@ -48,7 +49,7 @@ export async function registerUserController(req,res){
             })
         })
 
-        return response.json({
+        return res.json({
             message : "User register successfully",
             error : false,
             success : true,
@@ -56,10 +57,42 @@ export async function registerUserController(req,res){
         })
 
     } catch (error) {
-        return response.status(500).json({
+        return res.status(500).json({
             message : error.message || error,
             error : true,
             success : false
+        })
+    }
+}
+
+export async function verifyEmail(req,res){
+    try {
+        const { code } = req.body
+
+        const user = await UserModel.findOne({ _id : code})
+
+        if(!user){
+            return res.status(400).json({
+                message : "Invalid code",
+                error : true,
+                success : false
+            })
+        }
+
+        const updateUser = await UserModel.updateOne({ _id : code },{
+            verify_email : true
+        })
+
+        return res.json({
+            message : "Verify email done",
+            success : true,
+            error : false
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : true
         })
     }
 }
