@@ -173,34 +173,34 @@ export async function login(req,res){
     }
 }
 
-// //logout controller
-// export async function logoutController(request,response){
-//     try {
-//         const userid = request.userId //middleware
+//logout controller
+export async function logout(req,res){
+    try {
+        const userid = req.userId //middleware
 
-//         const cookiesOption = {
-//             httpOnly : true,
-//             secure : true,
-//             sameSite : "None"
-//         }
+        const cookiesOption = {
+            httpOnly : true,
+            secure : true,
+            sameSite : "None"
+        }
 
-//         response.clearCookie("accessToken",cookiesOption)
-//         response.clearCookie("refreshToken",cookiesOption)
+        res.clearCookie("accessToken",cookiesOption)
+        res.clearCookie("refreshToken",cookiesOption)
 
-//         const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
-//             refresh_token : ""
-//         })
+        const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
+            refresh_token : ""
+        })
 
-//         return response.json({
-//             message : "Logout successfully",
-//             error : false,
-//             success : true
-//         })
-//     } catch (error) {
-//         return response.status(500).json({
-//             message : error.message || error,
-//             error : true,
-//             success : false
-//         })
-//     }
-// }
+        return res.json({
+            message : "Logout successfully",
+            error : false,
+            success : true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
