@@ -2,7 +2,8 @@ import UserModel from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
 import verifyEmailTemplate from '../utils/verifyEmailTemplate.js'
 import sendEmail from '../config/sendEmail.js'
-
+import generatedAccessToken from '../utils/generatedAccessToken.js'
+import genertedRefreshToken from '../utils/generatedRefreshToken.js'
 
 export async function registerUser(req,res){
     try {
@@ -97,7 +98,7 @@ export async function verifyEmail(req,res){
     }
 }
 
-export async function loginController(req,res){
+export async function login(req,res){
     try {
         const { email , password } = req.body
 
@@ -153,7 +154,7 @@ export async function loginController(req,res){
         res.cookie('accessToken',accesstoken,cookiesOption)
         res.cookie('refreshToken',refreshToken,cookiesOption)
 
-        return response.json({
+        return res.json({
             message : "Login successfully",
             error : false,
             success : true,

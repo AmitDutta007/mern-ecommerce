@@ -1,12 +1,18 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
-const generatedAccessToken = async(userId)=>{
-    const token = await jwt.sign({ id : userId},
-        process.env.SECRET_KEY_ACCESS_TOKEN,
-        { expiresIn : '5h'}
-    )
+const generatedAccessToken = (userId) => {
+    try {
+        const token = jwt.sign(
+            { id: userId },
+            process.env.SECRET_KEY_ACCESS_TOKEN,
+            { expiresIn: '5h' }
+        );
 
-    return token
-}
+        return token;
+    } catch (error) {
+        console.error('Error generating access token:', error);
+        throw new Error('Token generation failed');
+    }
+};
 
-export default generatedAccessToken
+export default generatedAccessToken;
