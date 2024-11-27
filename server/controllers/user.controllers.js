@@ -206,3 +206,32 @@ export async function logout(req,res){
     }
 }
 
+export async  function uploadAvatar(req,res){
+    try {
+        const userId = req.userId // auth middlware
+        const image = req.file  // multer middleware
+
+        const upload = await uploadImageClodinary(image)
+        
+        const updateUser = await UserModel.findByIdAndUpdate(userId,{
+            avatar : upload.url
+        })
+
+        return res.json({
+            message : "upload profile",
+            success : true,
+            error : false,
+            data : {
+                _id : userId,
+                avatar : upload.url
+            }
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
