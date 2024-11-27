@@ -4,6 +4,7 @@ import verifyEmailTemplate from '../utils/verifyEmailTemplate.js'
 import sendEmail from '../config/sendEmail.js'
 import generatedAccessToken from '../utils/generatedAccessToken.js'
 import genertedRefreshToken from '../utils/generatedRefreshToken.js'
+import uploadImageClodinary from '../utils/uploadImageCloudnery.js'
 
 export async function registerUser(req,res){
     try {
@@ -204,3 +205,4 @@ export async function logout(req,res){
         })
     }
 }
+
