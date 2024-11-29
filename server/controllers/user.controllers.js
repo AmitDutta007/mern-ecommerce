@@ -6,35 +6,35 @@ import generatedAccessToken from '../utils/generatedAccessToken.js'
 import genertedRefreshToken from '../utils/generatedRefreshToken.js'
 import uploadImageClodinary from '../utils/uploadImageCloudnery.js'
 
-export async function registerUser(req,res){
+export async function registerUser(req, res) {
     try {
-        const { name, email , password } = req.body
+        const { name, email, password } = req.body
 
-        if(!name || !email || !password){
+        if (!name || !email || !password) {
             return res.status(400).json({
-                message : "provide email, name, password",
-                error : true,
-                success : false
+                message: "provide email, name, password",
+                error: true,
+                success: false
             })
         }
 
         const user = await UserModel.findOne({ email })
 
-        if(user){
+        if (user) {
             return res.json({
-                message : "Already register email",
-                error : true,
-                success : false
+                message: "Already register email",
+                error: true,
+                success: false
             })
         }
 
         const salt = await bcryptjs.genSalt(10)
-        const hashPassword = await bcryptjs.hash(password,salt)
+        const hashPassword = await bcryptjs.hash(password, salt)
 
         const payload = {
             name,
             email,
-            password : hashPassword
+            password: hashPassword
         }
 
         const newUser = new UserModel(payload)
@@ -43,123 +43,123 @@ export async function registerUser(req,res){
         const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
 
         const verifyEmail = await sendEmail({
-            sendTo : email,
-            subject : "Verify email from grabvault",
-            html : verifyEmailTemplate({
+            sendTo: email,
+            subject: "Verify email from grabvault",
+            html: verifyEmailTemplate({
                 name,
-                url : VerifyEmailUrl
+                url: VerifyEmailUrl
             })
         })
 
         return res.json({
-            message : "User register successfully",
-            error : false,
-            success : true,
-            data : save
+            message: "User register successfully",
+            error: false,
+            success: true,
+            data: save
         })
 
     } catch (error) {
         return res.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
+            message: error.message || error,
+            error: true,
+            success: false
         })
     }
 }
 
-export async function verifyEmail(req,res){
+export async function verifyEmail(req, res) {
     try {
         const { code } = req.body
 
-        const user = await UserModel.findOne({ _id : code})
+        const user = await UserModel.findOne({ _id: code })
 
-        if(!user){
+        if (!user) {
             return res.status(400).json({
-                message : "Invalid code",
-                error : true,
-                success : false
+                message: "Invalid code",
+                error: true,
+                success: false
             })
         }
 
-        const updateUser = await UserModel.updateOne({ _id : code },{
-            verify_email : true
+        const updateUser = await UserModel.updateOne({ _id: code }, {
+            verify_email: true
         })
 
         return res.json({
-            message : "Verify email done",
-            success : true,
-            error : false
+            message: "Verify email done",
+            success: true,
+            error: false
         })
     } catch (error) {
         return res.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : true
+            message: error.message || error,
+            error: true,
+            success: true
         })
     }
 }
 
-export async function login(req,res){
+export async function login(req, res) {
     try {
-        const { email , password } = req.body
+        const { email, password } = req.body
 
 
-        if(!email || !password){
+        if (!email || !password) {
             return res.status(400).json({
-                message : "provide email, password",
-                error : true,
-                success : false
+                message: "provide email, password",
+                error: true,
+                success: false
             })
         }
 
         const user = await UserModel.findOne({ email })
 
-        if(!user){
+        if (!user) {
             return res.status(400).json({
-                message : "User not register",
-                error : true,
-                success : false
+                message: "User not register",
+                error: true,
+                success: false
             })
         }
 
-        if(user.status !== "Active"){
+        if (user.status !== "Active") {
             return res.status(400).json({
-                message : "Contact to Admin",
-                error : true,
-                success : false
+                message: "Contact to Admin",
+                error: true,
+                success: false
             })
         }
 
-        const checkPassword = await bcryptjs.compare(password,user.password)
+        const checkPassword = await bcryptjs.compare(password, user.password)
 
-        if(!checkPassword){
+        if (!checkPassword) {
             return res.status(400).json({
-                message : "Check your password",
-                error : true,
-                success : false
+                message: "Check your password",
+                error: true,
+                success: false
             })
         }
 
         const accesstoken = await generatedAccessToken(user._id)
         const refreshToken = await genertedRefreshToken(user._id)
 
-        const updateUser = await UserModel.findByIdAndUpdate(user?._id,{
-            last_login_date : new Date()
+        const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+            last_login_date: new Date()
         })
 
         const cookiesOption = {
-            httpOnly : true,
-            secure : true,
-            sameSite : "None"
+            httpOnly: true,
+            secure: true,
+            sameSite: "None"
         }
-        res.cookie('accessToken',accesstoken,cookiesOption)
-        res.cookie('refreshToken',refreshToken,cookiesOption)
+        res.cookie('accessToken', accesstoken, cookiesOption)
+        res.cookie('refreshToken', refreshToken, cookiesOption)
 
         return res.json({
-            message : "Login successfully",
-            error : false,
-            success : true,
-            data : {
+            message: "Login successfully",
+            error: false,
+            success: true,
+            data: {
                 accesstoken,
                 refreshToken
             }
@@ -167,71 +167,111 @@ export async function login(req,res){
 
     } catch (error) {
         return res.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
+            message: error.message || error,
+            error: true,
+            success: false
         })
     }
 }
 
 //logout controller
-export async function logout(req,res){
+export async function logout(req, res) {
     try {
         const userid = req.userId //middleware
 
         const cookiesOption = {
-            httpOnly : true,
-            secure : true,
-            sameSite : "None"
+            httpOnly: true,
+            secure: true,
+            sameSite: "None"
         }
 
-        res.clearCookie("accessToken",cookiesOption)
-        res.clearCookie("refreshToken",cookiesOption)
+        res.clearCookie("accessToken", cookiesOption)
+        res.clearCookie("refreshToken", cookiesOption)
 
-        const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
-            refresh_token : ""
+        const removeRefreshToken = await UserModel.findByIdAndUpdate(userid, {
+            refresh_token: ""
         })
 
         return res.json({
-            message : "Logout successfully",
-            error : false,
-            success : true
+            message: "Logout successfully",
+            error: false,
+            success: true
         })
     } catch (error) {
         return res.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
+            message: error.message || error,
+            error: true,
+            success: false
         })
     }
 }
 
-export async  function uploadAvatar(req,res){
+export async function uploadAvatar(req, res) {
     try {
         const userId = req.userId // auth middlware
         const image = req.file  // multer middleware
 
         const upload = await uploadImageClodinary(image)
-        
-        const updateUser = await UserModel.findByIdAndUpdate(userId,{
-            avatar : upload.url
+
+        const updateUser = await UserModel.findByIdAndUpdate(userId, {
+            avatar: upload.url
         })
 
         return res.json({
-            message : "upload profile",
-            success : true,
-            error : false,
-            data : {
-                _id : userId,
-                avatar : upload.url
+            message: "upload profile",
+            success: true,
+            error: false,
+            data: {
+                _id: userId,
+                avatar: upload.url
             }
         })
 
     } catch (error) {
         return res.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
+            message: error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}
+
+//update user details
+export async function updateUserDetails(req, res) {
+    try {
+        const userId = req.userId //auth middleware
+        const { name, email, mobile, password, avatar } = req.body
+
+        let hashPassword = ""
+
+        if (password) {
+            const salt = await bcryptjs.genSalt(10)
+            hashPassword = await bcryptjs.hash(password, salt)
+        }
+
+        const updateUser = await UserModel.findByIdAndUpdate({ _id: userId }, {
+            $set: {
+                name: req.body.name,
+                email: req.body.email,
+                mobile: req.body.mobile,
+                password: req.body.hashPassword,
+            }
+        }, { new: true }
+        )
+
+        return res.json({
+            message: "Updated successfully",
+            error: false,
+            success: true,
+            data: updateUser
+        })
+
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
         })
     }
 }

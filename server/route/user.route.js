@@ -3,6 +3,7 @@ import {
     login,
     logout,
     registerUser,
+    updateUserDetails,
     uploadAvatar,
     verifyEmail,
    
@@ -17,6 +18,7 @@ userRouter.post('/verify-email', verifyEmail)
 userRouter.post('/login', login)
 userRouter.get('/logout', auth, logout)
 userRouter.put('/upload-pic', auth, upload.single('avatar'), uploadAvatar)
+userRouter.put('/update-user', auth, updateUserDetails)
 
 
 
