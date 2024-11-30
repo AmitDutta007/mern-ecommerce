@@ -5,6 +5,8 @@ import sendEmail from '../config/sendEmail.js'
 import generatedAccessToken from '../utils/generatedAccessToken.js'
 import genertedRefreshToken from '../utils/generatedRefreshToken.js'
 import uploadImageClodinary from '../utils/uploadImageCloudnery.js'
+import generatedOtp from '../utils/generateOtp.js'
+import forgotPasswordTemplate from '../utils/forgotPasswordTemplate.js'
 
 export async function registerUser(req, res) {
     try {
@@ -268,6 +270,63 @@ export async function updateUserDetails(req, res) {
 
 
     } catch (error) {
+        return res.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}
+
+//forgot password not login
+export async function forgotPassword(req, res) {
+    try {
+        const { email } = req.body
+
+        if (!email) {
+            return res.status(400).json({
+                message: "Email is required",
+                error: true,
+                success: false,
+            });
+        }
+
+        const user = await UserModel.findOne({ email })
+
+        if (!user) {
+            return res.status(400).json({
+                message: "User with the provided email does not exist.",
+                error: true,
+                success: false
+            })
+        }
+
+        const otp = generatedOtp()
+        const expireTime = new Date() + 60 * 60 * 1000 // 1hr
+
+        const update = await UserModel.findByIdAndUpdate(user._id, {
+            forgot_password_otp: otp,
+            forgot_password_expiry: new Date(expireTime).toISOString()
+        })
+
+        await sendEmail({
+            sendTo: email,
+            subject: "Forgot password from GrabVault",
+            html: forgotPasswordTemplate({
+                name: user.name,
+                otp
+            })
+        })
+
+        
+        return res.status(200).json({
+            message: "An OTP has been sent to your email. Please check your inbox.",
+            error: false,
+            success: true,
+        });
+
+    } catch (error) {
+        console.error("Error in forgotPasswordController:", error);
         return res.status(500).json({
             message: error.message || error,
             error: true,
