@@ -318,7 +318,7 @@ export async function forgotPassword(req, res) {
             })
         })
 
-        
+
         return res.status(200).json({
             message: "An OTP has been sent to your email. Please check your inbox.",
             error: false,
@@ -336,65 +336,126 @@ export async function forgotPassword(req, res) {
 }
 
 //verify forgot password otp
-export async function verifyForgotPasswordOtp(req,res){
+export async function verifyForgotPasswordOtp(req, res) {
     try {
-        const { email , otp }  = req.body
+        const { email, otp } = req.body
 
-        if(!email || !otp){
+        if (!email || !otp) {
             return res.status(400).json({
-                message : "Provide required field email, otp.",
-                error : true,
-                success : false
+                message: "Provide required field email, otp.",
+                error: true,
+                success: false
             })
         }
 
         const user = await UserModel.findOne({ email })
 
-        if(!user){
+        if (!user) {
             return res.status(400).json({
-                message : "Email not available",
-                error : true,
-                success : false
+                message: "Email not available",
+                error: true,
+                success: false
             })
         }
 
         const currentTime = new Date().toISOString()
 
-        if(user.forgot_password_expiry < currentTime  ){
+        if (user.forgot_password_expiry < currentTime) {
             return res.status(400).json({
-                message : "Otp is expired",
-                error : true,
-                success : false
+                message: "Otp is expired",
+                error: true,
+                success: false
             })
         }
 
-        if(otp !== user.forgot_password_otp){
+        if (otp !== user.forgot_password_otp) {
             return res.status(400).json({
-                message : "Invalid otp",
-                error : true,
-                success : false
+                message: "Invalid otp",
+                error: true,
+                success: false
             })
         }
 
         //if otp is not expired
         //otp === user.forgot_password_otp
 
-        const updateUser = await UserModel.findByIdAndUpdate(user?._id,{
-            forgot_password_otp : "",
-            forgot_password_expiry : ""
+        const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+            forgot_password_otp: "",
+            forgot_password_expiry: ""
         })
-        
+
         return res.json({
-            message : "Verify otp successfully",
-            error : false,
-            success : true
+            message: "Verify otp successfully",
+            error: false,
+            success: true
         })
 
     } catch (error) {
         return res.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
+            message: error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}
+
+//reset the password
+export async function resetpassword(req, res) {
+    try {
+        const { email, newPassword, confirmPassword } = req.body
+
+        if (!email || !newPassword || !confirmPassword) {
+            return res.status(400).json({
+                message: "provide required fields email, newPassword, confirmPassword"
+            })
+        }
+
+        const user = await UserModel.findOne({ email })
+
+        if (!user) {
+            return res.status(400).json({
+                message: "Email is not available",
+                error: true,
+                success: false
+            })
+        }
+
+        const isSameAsOldPassword = await bcryptjs.compare(newPassword, user.password);
+
+        if (isSameAsOldPassword) {
+            return res.status(400).json({
+                message: "New password cannot be the same as the old password.",
+                error: true,
+                success: false,
+            });
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({
+                message: "newPassword and confirmPassword must be same.",
+                error: true,
+                success: false,
+            })
+        }
+
+        const salt = await bcryptjs.genSalt(10)
+        const hashPassword = await bcryptjs.hash(newPassword, salt)
+
+        const update = await UserModel.findOneAndUpdate(user._id, {
+            password: hashPassword
+        })
+
+        return res.json({
+            message: "Password updated successfully.",
+            error: false,
+            success: true
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
         })
     }
 }
