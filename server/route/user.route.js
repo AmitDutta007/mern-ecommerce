@@ -3,6 +3,7 @@ import {
     forgotPassword,
     login,
     logout,
+    refreshToken,
     registerUser,
     resetpassword,
     updateUserDetails,
@@ -25,6 +26,8 @@ userRouter.put('/update-user', auth, updateUserDetails)
 userRouter.put('/forgot-password', forgotPassword)
 userRouter.put('/verify-otp', verifyForgotPasswordOtp)
 userRouter.put('/reset-password', resetpassword)
+userRouter.post('/refresh-token', refreshToken)
+
 
 
 
