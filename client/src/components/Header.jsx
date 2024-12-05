@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import Search from "./Search"
 import logo from '../assets/logo.webp'
+import { FaRegCircleUser } from "react-icons/fa6";
 
 const Header = () => {
   return (
@@ -27,6 +28,14 @@ const Header = () => {
           </div>
           <div className='hidden lg:block'>
             <Search />
+          </div>
+          <div className=''>
+            {/**user icons display in only mobile version**/}
+            <button className='text-neutral-600 lg:hidden'
+            //onClick={handleMobileUser}
+            >
+              <FaRegCircleUser size={26} />
+            </button>
           </div>
         </div>
         <div className='container mx-auto px-2 lg:hidden'>
