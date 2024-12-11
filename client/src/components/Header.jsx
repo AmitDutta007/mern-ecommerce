@@ -6,6 +6,7 @@ import useMobile from "../hooks/useMobile";
 import { BsCart4 } from "react-icons/bs";
 // import { useSelector } from 'react-redux';
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
+import { useSelector } from "react-redux";
 // import UserMenu from './UserMenu';
 // import { DisplayPriceInRupees } from '../utils/DisplayPriceInRupees';
 // import { useGlobalContext } from '../provider/GlobalProvider';
@@ -16,6 +17,8 @@ const Header = () => {
   const location = useLocation()
   const isSearchPage = location.pathname === "/search"
   const navigate = useNavigate()
+  const user = useSelector((state)=> state?.user)
+
   return (
     <>
       <header className='h-24 lg:h-20 lg:shadow-md sticky top-0 z-40 flex flex-col justify-center gap-1 bg-white'>
