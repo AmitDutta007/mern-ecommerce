@@ -21,6 +21,21 @@ Axios.interceptors.request.use(
         return Promise.reject(error)
     }
 )
+//sending access token in the header
+Axios.interceptors.request.use(
+    async(config)=>{
+        const accessToken = localStorage.getItem('accesstoken')
+
+        if(accessToken){
+            config.headers.Authorization = `Bearer ${accessToken}`
+        }
+
+        return config
+    },
+    (error)=>{
+        return Promise.reject(error)
+    }
+)
 
 // //extend the life span of access token with 
 // // the help refresh

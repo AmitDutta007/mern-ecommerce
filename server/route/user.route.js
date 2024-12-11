@@ -8,6 +8,7 @@ import {
     resetpassword,
     updateUserDetails,
     uploadAvatar,
+    userDetails,
     verifyEmail,
     verifyForgotPasswordOtp,
 
@@ -27,6 +28,7 @@ userRouter.put('/forgot-password', forgotPassword)
 userRouter.put('/verify-otp', verifyForgotPasswordOtp)
 userRouter.put('/reset-password', resetpassword)
 userRouter.post('/refresh-token', refreshToken)
+userRouter.get('/user-details',auth,userDetails)
 
 
 
