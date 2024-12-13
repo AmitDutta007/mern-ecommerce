@@ -1,12 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import Search from "./Search"
-import logo from '../assets/logo.webp'
 import { FaRegCircleUser } from "react-icons/fa6";
 import useMobile from "../hooks/useMobile";
 import { BsCart4 } from "react-icons/bs";
 // import { useSelector } from 'react-redux';
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import { useSelector } from "react-redux";
+import UserMenu from "./UserMenu";
+import { useState } from "react";
 // import UserMenu from './UserMenu';
 // import { DisplayPriceInRupees } from '../utils/DisplayPriceInRupees';
 // import { useGlobalContext } from '../provider/GlobalProvider';
@@ -17,7 +18,26 @@ const Header = () => {
   const location = useLocation()
   const isSearchPage = location.pathname === "/search"
   const navigate = useNavigate()
-  const user = useSelector((state)=> state?.user)
+  const user = useSelector((state) => state?.user)
+  const [openUserMenu, setOpenUserMenu] = useState(false)
+
+
+  const redirectToLoginPage = () => {
+    navigate("/login")
+  }
+  const handleCloseUserMenu = () => {
+    setOpenUserMenu(false)
+  }
+
+  const handleMobileUser = () => {
+    if (!user._id) {
+      navigate("/login")
+      return
+    }
+
+    navigate("/user")
+  }
+
 
   return (
     <>
@@ -50,16 +70,18 @@ const Header = () => {
               <div className=''>
                 {/**user icons display in only mobile version**/}
                 <button className='text-neutral-600 lg:hidden'
-                //onClick={handleMobileUser}
+                  onClick={handleMobileUser}
                 >
                   <FaRegCircleUser size={26} />
                 </button>
                 {/**Desktop**/}
                 <div className='hidden lg:flex  items-center gap-10'>
-                  {/* {
+                  {
                     user?._id ? (
                       <div className='relative'>
-                        <div onClick={() => setOpenUserMenu(preve => !preve)} className='flex select-none items-center gap-1 cursor-pointer'>
+                        <div
+                          onClick={() => setOpenUserMenu(prev => !prev)}
+                          className='flex select-none items-center gap-1 cursor-pointer'>
                           <p>Account</p>
                           {
                             openUserMenu ? (
@@ -82,11 +104,11 @@ const Header = () => {
 
                       </div>
                     ) : (
-                      <button 
-                      // onClick={redirectToLoginPage} 
-                      className='text-lg px-2'>Login</button>
+                      <button
+                        onClick={redirectToLoginPage}
+                        className='text-lg px-2'>Login</button>
                     )
-                  } */}
+                  }
                   <button
                     // onClick={() => setOpenCartSection(true)} 
                     className='flex items-center gap-2 bg-green-800 hover:bg-green-700 px-3 py-2 rounded text-white'>

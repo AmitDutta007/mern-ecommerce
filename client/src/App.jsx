@@ -5,6 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import fetchUserDetails from "./utils/fetchUserDetails";
+import { setUserDetails } from "./store/userSlice";
 
 
 function App() {
@@ -14,8 +15,9 @@ function App() {
 
   const fetchUser = async () => {
     const userData = await fetchUserDetails()
-    // dispatch(setUserDetails(userData.data))
+    dispatch(setUserDetails(userData.data))
   }
+  
   useEffect(() => {
     fetchUser()
     // fetchCategory()
