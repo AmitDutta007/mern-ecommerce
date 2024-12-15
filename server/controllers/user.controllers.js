@@ -3,7 +3,7 @@ import bcryptjs from 'bcryptjs'
 import verifyEmailTemplate from '../utils/verifyEmailTemplate.js'
 import sendEmail from '../config/sendEmail.js'
 import generatedAccessToken from '../utils/generatedAccessToken.js'
-import genertedRefreshToken from '../utils/generatedRefreshToken.js'
+import generatedRefreshToken from '../utils/generatedRefreshToken.js'
 import uploadImageClodinary from '../utils/uploadImageCloudnery.js'
 import generatedOtp from '../utils/generateOtp.js'
 import forgotPasswordTemplate from '../utils/forgotPasswordTemplate.js'
@@ -142,8 +142,8 @@ export async function login(req, res) {
             })
         }
 
-        const accesstoken = await generatedAccessToken(user._id)
-        const refreshToken = await genertedRefreshToken(user._id)
+        const accessToken = await generatedAccessToken(user._id)
+        const refreshToken = await generatedRefreshToken(user._id)
 
         const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
             last_login_date: new Date()
@@ -152,9 +152,9 @@ export async function login(req, res) {
         const cookiesOption = {
             httpOnly: true,
             secure: true,
-            sameSite: "None"
+            maxAge: 7 * 24 * 60 * 60 * 1000
         }
-        res.cookie('accessToken', accesstoken, cookiesOption)
+        res.cookie('accessToken', accessToken, cookiesOption)
         res.cookie('refreshToken', refreshToken, cookiesOption)
 
         return res.json({
@@ -162,7 +162,7 @@ export async function login(req, res) {
             error: false,
             success: true,
             data: {
-                accesstoken,
+                accessToken,
                 refreshToken
             }
         })

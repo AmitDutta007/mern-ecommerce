@@ -34,7 +34,7 @@ const SummaryApi = {
         method : 'get'
     },
     uploadAvatar : {
-        url : "/api/user/upload-avatar",
+        url : "/api/user/upload-pic",
         method : 'put'
     },
     updateUserDetails : {

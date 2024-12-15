@@ -33,9 +33,9 @@ const userSlice  = createSlice({
             state.orderHistory = action.payload?.orderHistory
             state.role = action.payload?.role
         },
-        // updatedAvatar : (state,action)=>{
-        //     state.avatar = action.payload
-        // },
+        updatedAvatar : (state,action)=>{
+            state.avatar = action.payload
+        },
         logout : (state,action)=>{
             state._id = ""
             state.name  = ""

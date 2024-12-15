@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaRegUserCircle } from "react-icons/fa";
-// import UserProfileAvatarEdit from '../components/UserProfileAvatarEdit';
+import UserProfileAvatarEdit from '../components/UserProfileAvatarEdit';
 import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import AxiosToastError from '../utils/AxiosToastError';
@@ -85,9 +85,9 @@ const Profile = () => {
         <button onClick={()=>setProfileAvatarEdit(true)} className='text-sm min-w-20 border border-primary-100 hover:border-primary-200 hover:bg-primary-200 px-3 py-1 rounded-full mt-3'>Edit</button>
         
         {
-            // openProfileAvatarEdit && (
-            //     <UserProfileAvatarEdit close={()=>setProfileAvatarEdit(false)}/>
-            // )
+            openProfileAvatarEdit && (
+                <UserProfileAvatarEdit close={()=>setProfileAvatarEdit(false)}/>
+            )
         }
 
         {/**name, mobile , email, change password */}
