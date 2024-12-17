@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IoClose } from "react-icons/io5";
-// import uploadImage from '../utils/UploadImage';
+import uploadImage from '../utils/UploadImage';
 import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import toast from 'react-hot-toast'
@@ -35,6 +35,9 @@ const UploadCategoryModel = ({close, fetchData}) => {
                 data : data
             })
             const { data : responseData } = response
+            console.log('====================================');
+            console.log(responseData);
+            console.log('====================================');
 
             if(responseData.success){
                 toast.success(responseData.message)
@@ -55,15 +58,15 @@ const UploadCategoryModel = ({close, fetchData}) => {
             return
         }
 
-        // const response = await uploadImage(file)
-        // const { data : ImageResponse } = response
+        const response = await uploadImage(file)
+        const { data : ImageResponse } = response
 
-        // setData((preve)=>{
-        //     return{
-        //         ...preve,
-        //         image : ImageResponse.data.url
-        //     }
-        // })
+        setData((preve)=>{
+            return{
+                ...preve,
+                image : ImageResponse.data.url
+            }
+        })
     }
   return (
     <section className='fixed top-0 bottom-0 left-0 right-0 p-4 bg-neutral-800 bg-opacity-60 flex items-center justify-center'>
