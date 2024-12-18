@@ -1,24 +1,59 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import UploadCategoryModel from "../components/UploadCategoryModel"
+import Axios from "../utils/Axios"
+import SummaryApi from "../common/SummaryApi"
+import AxiosToastError from "../utils/AxiosToastError"
 
 const CategoryPage = () => {
 
-  const [openUploadCategory,setOpenUploadCategory] = useState(false)
+    const [openUploadCategory, setOpenUploadCategory] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [categoryData, setCategoryData] = useState([])
+    const [openEdit, setOpenEdit] = useState(false)
+    const [editData, setEditData] = useState({
+        name: "",
+        image: "",
+    })
+    const [openConfimBoxDelete, setOpenConfirmBoxDelete] = useState(false)
+    const [deleteCategory, setDeleteCategory] = useState({
+        _id: ""
+    })
 
+    const fetchCategory = async () => {
+        try {
+            setLoading(true)
+            const response = await Axios({
+                ...SummaryApi.getCategory
+            })
+            const { data: responseData } = response
 
-  return (
-    <section className=''>
-        <div className='p-2   bg-white shadow-md flex items-center justify-between'>
-            <h2 className='font-semibold'>Category</h2>
-            <button onClick={()=>setOpenUploadCategory(true)} className='text-sm border border-primary-200 hover:bg-primary-200 px-3 py-1 rounded'>Add Category</button>
-        </div>
-        {/* {
+            if (responseData.success) {
+                setCategoryData(responseData.data)
+            }
+        } catch (error) {
+            AxiosToastError(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchCategory()
+    }, [])
+
+    return (
+        <section className=''>
+            <div className='p-2   bg-white shadow-md flex items-center justify-between'>
+                <h2 className='font-semibold'>Category</h2>
+                <button onClick={() => setOpenUploadCategory(true)} className='text-sm border border-primary-200 hover:bg-primary-200 px-3 py-1 rounded'>Add Category</button>
+            </div>
+            {/* {
             !categoryData[0] && !loading && (
                 <NoData/>
             )
         } */}
 
-        {/* <div className='p-4 grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2'>
+            {/* <div className='p-4 grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2'>
             {
                 categoryData.map((category,index)=>{
                     return(
@@ -48,21 +83,21 @@ const CategoryPage = () => {
             }
         </div> */}
 
-        {/* {
+            {/* {
             loading && (
                 <Loading/>
             )
         } */}
 
-        {
-            openUploadCategory && (
-                <UploadCategoryModel 
-                // fetchData={fetchCategory} 
-                close={()=>setOpenUploadCategory(false)}/>
-            )
-        }
+            {
+                openUploadCategory && (
+                    <UploadCategoryModel
+                        fetchData={fetchCategory} 
+                        close={() => setOpenUploadCategory(false)} />
+                )
+            }
 
-        {/* {
+            {/* {
             openEdit && (
                 <EditCategory data={editData} close={()=>setOpenEdit(false)} fetchData={fetchCategory}/>
             )
@@ -73,8 +108,8 @@ const CategoryPage = () => {
             <CofirmBox close={()=>setOpenConfirmBoxDelete(false)} cancel={()=>setOpenConfirmBoxDelete(false)} confirm={handleDeleteCategory}/>
            ) 
         } */}
-    </section>
-  )
+        </section>
+    )
 }
 
 export default CategoryPage

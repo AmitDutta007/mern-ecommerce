@@ -43,3 +43,31 @@ export const AddCategoryController = async (request, response) => {
         })
     }
 }
+
+export const getCategory = async(request,response)=>{
+    try {
+        
+        const data = await CategoryModel.find().sort({ createdAt : -1 })
+
+
+        if (!data) {
+            return response.status(500).json({
+                message: "Not category found",
+                error: true,
+                success: false
+            })
+        }
+
+        return response.json({
+            data : data,
+            error : false,
+            success : true
+        })
+    } catch (error) {
+        return response.status(500).json({
+            message : error.messsage || error,
+            error : true,
+            success : false
+        })
+    }
+}
