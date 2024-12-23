@@ -6,6 +6,7 @@ import AxiosToastError from "../utils/AxiosToastError"
 import NoData from '../components/NoData'
 import Loading from '../components/Loading'
 import EditCategory from "../components/EditCategory"
+import CofirmBox from "../components/ConfirmBox"
 
 const CategoryPage = () => {
 
@@ -106,11 +107,14 @@ const CategoryPage = () => {
                 )
             }
 
-            {/*
-                openConfimBoxDelete && (
-                    <CofirmBox close={() => setOpenConfirmBoxDelete(false)} cancel={() => setOpenConfirmBoxDelete(false)} confirm={handleDeleteCategory} />
-                )
-            } */}
+
+            openConfimBoxDelete && (
+            <CofirmBox
+                close={() => setOpenConfirmBoxDelete(false)}
+                cancel={() => setOpenConfirmBoxDelete(false)}
+                confirm={handleDeleteCategory} />
+            )
+
         </section>
     )
 }
