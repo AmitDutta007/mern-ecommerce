@@ -5,6 +5,7 @@ import SummaryApi from "../common/SummaryApi"
 import AxiosToastError from "../utils/AxiosToastError"
 import NoData from '../components/NoData'
 import Loading from '../components/Loading'
+import EditCategory from "../components/EditCategory"
 
 const CategoryPage = () => {
 
@@ -86,10 +87,10 @@ const CategoryPage = () => {
             </div>
 
             {
-            loading && (
-                <Loading/>
-            )
-        }
+                loading && (
+                    <Loading />
+                )
+            }
 
             {
                 openUploadCategory && (
@@ -99,17 +100,17 @@ const CategoryPage = () => {
                 )
             }
 
-            {/* {
-            openEdit && (
-                <EditCategory data={editData} close={()=>setOpenEdit(false)} fetchData={fetchCategory}/>
-            )
-        }
+            {
+                openEdit && (
+                    <EditCategory data={editData} close={() => setOpenEdit(false)} fetchData={fetchCategory} />
+                )
+            }
 
-        {
-           openConfimBoxDelete && (
-            <CofirmBox close={()=>setOpenConfirmBoxDelete(false)} cancel={()=>setOpenConfirmBoxDelete(false)} confirm={handleDeleteCategory}/>
-           ) 
-        } */}
+            {/*
+                openConfimBoxDelete && (
+                    <CofirmBox close={() => setOpenConfirmBoxDelete(false)} cancel={() => setOpenConfirmBoxDelete(false)} confirm={handleDeleteCategory} />
+                )
+            } */}
         </section>
     )
 }
