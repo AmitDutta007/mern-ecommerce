@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react"
-import UploadCategoryModel from "../components/UploadCategoryModel"
-import Axios from "../utils/Axios"
-import SummaryApi from "../common/SummaryApi"
-import AxiosToastError from "../utils/AxiosToastError"
-import NoData from '../components/NoData'
+import React, { useEffect, useState } from 'react'
+import UploadCategoryModel from '../components/UploadCategoryModel'
 import Loading from '../components/Loading'
-import EditCategory from "../components/EditCategory"
-import CofirmBox from "../components/ConfirmBox"
+import NoData from '../components/NoData'
+import Axios from '../utils/Axios'
+import SummaryApi from '../common/SummaryApi'
+import EditCategory from '../components/EditCategory'
+import CofirmBox from '../components/ConfirmBox'
+import toast from 'react-hot-toast'
+import AxiosToastError from '../utils/AxiosToastError'
+import { useSelector } from 'react-redux'
 
 const CategoryPage = () => {
-
     const [openUploadCategory, setOpenUploadCategory] = useState(false)
     const [loading, setLoading] = useState(false)
     const [categoryData, setCategoryData] = useState([])
@@ -22,6 +23,12 @@ const CategoryPage = () => {
     const [deleteCategory, setDeleteCategory] = useState({
         _id: ""
     })
+    // const allCategory = useSelector(state => state.product.allCategory)
+
+
+    // useEffect(()=>{
+    //     setCategoryData(allCategory)
+    // },[allCategory])
 
     const fetchCategory = async () => {
         try {
@@ -45,6 +52,25 @@ const CategoryPage = () => {
         fetchCategory()
     }, [])
 
+    const handleDeleteCategory = async () => {
+        try {
+            const response = await Axios({
+                ...SummaryApi.deleteCategory,
+                data: deleteCategory
+            })
+
+            const { data: responseData } = response
+
+            if (responseData.success) {
+                toast.success(responseData.message)
+                fetchCategory()
+                setOpenConfirmBoxDelete(false)
+            }
+        } catch (error) {
+            AxiosToastError(error)
+        }
+    }
+
     return (
         <section className=''>
             <div className='p-2   bg-white shadow-md flex items-center justify-between'>
@@ -57,11 +83,11 @@ const CategoryPage = () => {
                 )
             }
 
-            <div className='p-4 grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8'>
+            <div className='p-4 grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2'>
                 {
                     categoryData.map((category, index) => {
                         return (
-                            <div className='rounded shadow-md' key={category._id}>
+                            <div className='w-32 h-56 rounded shadow-md' key={category._id}>
                                 <img
                                     alt={category.name}
                                     src={category.image}
@@ -95,9 +121,7 @@ const CategoryPage = () => {
 
             {
                 openUploadCategory && (
-                    <UploadCategoryModel
-                        fetchData={fetchCategory}
-                        close={() => setOpenUploadCategory(false)} />
+                    <UploadCategoryModel fetchData={fetchCategory} close={() => setOpenUploadCategory(false)} />
                 )
             }
 
@@ -107,14 +131,11 @@ const CategoryPage = () => {
                 )
             }
 
-
-            openConfimBoxDelete && (
-            <CofirmBox
-                close={() => setOpenConfirmBoxDelete(false)}
-                cancel={() => setOpenConfirmBoxDelete(false)}
-                confirm={handleDeleteCategory} />
-            )
-
+            {
+                openConfimBoxDelete && (
+                    <CofirmBox close={() => setOpenConfirmBoxDelete(false)} cancel={() => setOpenConfirmBoxDelete(false)} confirm={handleDeleteCategory} />
+                )
+            }
         </section>
     )
 }
