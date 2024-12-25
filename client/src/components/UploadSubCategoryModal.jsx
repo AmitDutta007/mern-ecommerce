@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import uploadImage from '../utils/UploadImage';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ const UploadSubCategoryModel = ({close, fetchData}) => {
         image : "",
         category : []
     })
-    const allCategory = useSelector(state => state.product.allCategory)
+    // const allCategory = useSelector(state => state.product.allCategory)
 
     const handleChange = (e)=>{
         const { name, value} = e.target 
@@ -152,7 +152,7 @@ const UploadSubCategoryModel = ({close, fetchData}) => {
                             </div>
 
                             {/*select category**/}
-                            <select
+                            {/* <select
                                 className='w-full p-2 bg-transparent outline-none border'
                                 onChange={(e)=>{
                                     const value = e.target.value
@@ -174,7 +174,7 @@ const UploadSubCategoryModel = ({close, fetchData}) => {
                                         )
                                     })
                                 }
-                            </select>
+                            </select> */}
                         </div>
                     </div>
 
