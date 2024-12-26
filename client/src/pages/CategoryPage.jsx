@@ -9,6 +9,7 @@ import CofirmBox from '../components/ConfirmBox'
 import toast from 'react-hot-toast'
 import AxiosToastError from '../utils/AxiosToastError'
 import { useSelector } from 'react-redux'
+import { setAllCategory } from '../store/productSlice'
 
 const CategoryPage = () => {
     const [openUploadCategory, setOpenUploadCategory] = useState(false)
@@ -23,34 +24,34 @@ const CategoryPage = () => {
     const [deleteCategory, setDeleteCategory] = useState({
         _id: ""
     })
-    // const allCategory = useSelector(state => state.product.allCategory)
+    const allCategory = useSelector(state => state.product.allCategory)
 
 
-    // useEffect(()=>{
-    //     setCategoryData(allCategory)
-    // },[allCategory])
+    useEffect(()=>{
+        setCategoryData(allCategory)
+    },[allCategory])
 
-    const fetchCategory = async () => {
-        try {
-            setLoading(true)
-            const response = await Axios({
-                ...SummaryApi.getCategory
-            })
-            const { data: responseData } = response
+    // const fetchCategory = async () => {
+    //     try {
+    //         setLoading(true)
+    //         const response = await Axios({
+    //             ...SummaryApi.getCategory
+    //         })
+    //         const { data: responseData } = response
 
-            if (responseData.success) {
-                setCategoryData(responseData.data)
-            }
-        } catch (error) {
-            AxiosToastError(error)
-        } finally {
-            setLoading(false)
-        }
-    }
+    //         if (responseData.success) {
+    //             setCategoryData(responseData.data)
+    //         }
+    //     } catch (error) {
+    //         AxiosToastError(error)
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
-    useEffect(() => {
-        fetchCategory()
-    }, [])
+    // useEffect(() => {
+    //     fetchCategory()
+    // }, [])
 
     const handleDeleteCategory = async () => {
         try {

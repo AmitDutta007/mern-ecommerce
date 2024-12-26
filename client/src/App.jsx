@@ -6,6 +6,11 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import fetchUserDetails from "./utils/fetchUserDetails";
 import { setUserDetails } from "./store/userSlice";
+import Axios from "./utils/Axios";
+import SummaryApi from "./common/SummaryApi";
+import { setAllCategory, setLoadingCategory } from "./store/productSlice";
+import { AxiosError } from "axios";
+import AxiosToastError from "./utils/AxiosToastError";
 
 
 function App() {
@@ -17,10 +22,28 @@ function App() {
     const userData = await fetchUserDetails()
     dispatch(setUserDetails(userData.data))
   }
+
+  const fetchCategory = async()=>{
+    try {
+        dispatch(setLoadingCategory(true))
+        const response = await Axios({
+            ...SummaryApi.getCategory
+        })
+        const { data : responseData } = response
+
+        if(responseData.success){
+           dispatch(setAllCategory(responseData.data.sort((a, b) => a.name.localeCompare(b.name)))) 
+        }
+    } catch (error) {
+      AxiosToastError(error)
+    }finally{
+      dispatch(setLoadingCategory(false))
+    }
+  }
   
   useEffect(() => {
     fetchUser()
-    // fetchCategory()
+    fetchCategory()
     // fetchSubCategory()
     // fetchCartItem()
   }, [])
