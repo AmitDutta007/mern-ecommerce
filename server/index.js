@@ -8,6 +8,7 @@ import connectDB from './config/connectDB.js';
 import userRouter from './route/user.route.js';
 import categoryRouter from './route/category.route.js';
 import uploadRouter from './route/upload.router.js';
+import subCategoryRouter from './route/subCategory.router.js'
 
 dotenv.config();
 const app = express();
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 app.use('/api/user', userRouter)
 app.use("/api/category",categoryRouter)
 app.use("/api/file",uploadRouter)
+app.use("/api/subcategory",subCategoryRouter)
 
 
 connectDB().then(() => {
