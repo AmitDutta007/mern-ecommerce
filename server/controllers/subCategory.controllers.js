@@ -39,7 +39,7 @@ export const AddSubCategory = async(req,res)=>{
 
 export const getSubCategory = async(req,res)=>{
     try {
-        const data = await SubCategoryModel.find().sort({createdAt : -1}).populate('category')
+        const data = await SubCategoryModel.find().sort({createdAt : -1})
         return res.json({
             message : "Sub Category data",
             data : data,

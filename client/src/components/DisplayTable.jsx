@@ -10,7 +10,7 @@ import {
 const DisplayTable = ({ data, column }) => {
   const table = useReactTable({
     data,
-    columns : column,
+    columns: column,
     getCoreRowModel: getCoreRowModel(),
   })
 
