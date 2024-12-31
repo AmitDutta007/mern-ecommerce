@@ -8,6 +8,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 // import { LuPencil } from "react-icons/lu";
 import { MdDelete  } from "react-icons/md";
 import { HiPencil } from "react-icons/hi";
+import ViewImage from "../components/ViewImage"
 // import EditSubCategory from '../components/EditSubCategory'
 // import CofirmBox from '../components/CofirmBox'
 // import toast from 'react-hot-toast'
@@ -71,7 +72,41 @@ const SubCategoryPage = () => {
       }
     }),
     columnHelper.accessor("category",{
-      header: 'Category'
+      header: 'Category',
+      cell : ({row})=>{
+        return(
+          <>
+            {
+              row.original.category.map((c,index)=>{
+                return(
+                  <p key={c._id+"table"} className='shadow-md px-1 inline-block'>{c.name}</p>
+                )
+              })
+            }
+          </>
+        )
+       }
+    }),
+    columnHelper.accessor("_id",{
+      header : "Action",
+      cell : ({row})=>{
+        return(
+          <div className='flex items-center justify-center gap-3'>
+              <button onClick={()=>{
+                  setOpenEdit(true)
+                  setEditData(row.original)
+              }} className='p-2 bg-green-100 rounded-full hover:text-green-600'>
+                  <HiPencil size={20}/>
+              </button>
+              <button onClick={()=>{
+                setOpenDeleteConfirmBox(true)
+                setDeleteSubCategory(row.original)
+              }} className='p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600'>
+                  <MdDelete  size={20}/>
+              </button>
+          </div>
+        )
+      }
     })
   ]
 
@@ -91,6 +126,10 @@ const SubCategoryPage = () => {
           />
         )
       }
+      {
+          ImageURL &&
+          <ViewImage url={ImageURL} close={()=>setImageURL("")}/>
+        }
       <div className='overflow-auto w-full max-w-[95vw]'>
         <DisplayTable
           data={data}
