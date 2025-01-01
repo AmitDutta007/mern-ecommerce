@@ -4,14 +4,14 @@ import {
     AddSubCategory,
     // deleteSubCategoryController,
     getSubCategory,
-    // updateSubCategoryController
+    updateSubCategory
 } from "../controllers/subCategory.controllers.js";
 
 const subCategoryRouter = Router()
 
 subCategoryRouter.post('/create', auth, AddSubCategory)
 subCategoryRouter.post('/get',getSubCategory)
-// subCategoryRouter.put('/update',auth,updateSubCategoryController)
+subCategoryRouter.put('/update',auth,updateSubCategory)
 // subCategoryRouter.delete('/delete',auth,deleteSubCategoryController)
 
 export default subCategoryRouter
