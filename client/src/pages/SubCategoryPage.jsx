@@ -6,9 +6,10 @@ import SummaryApi from '../common/SummaryApi'
 import DisplayTable from '../components/DisplayTable'
 import { createColumnHelper } from '@tanstack/react-table'
 // import { LuPencil } from "react-icons/lu";
-import { MdDelete  } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { HiPencil } from "react-icons/hi";
 import ViewImage from "../components/ViewImage"
+import EditSubCategory from "../components/EditSubCategory"
 // import EditSubCategory from '../components/EditSubCategory'
 // import CofirmBox from '../components/CofirmBox'
 // import toast from 'react-hot-toast'
@@ -47,9 +48,9 @@ const SubCategoryPage = () => {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchSubCategory()
-  },[])
+  }, [])
 
   const column = [
     columnHelper.accessor('name', {
@@ -71,39 +72,39 @@ const SubCategoryPage = () => {
         </div>
       }
     }),
-    columnHelper.accessor("category",{
+    columnHelper.accessor("category", {
       header: 'Category',
-      cell : ({row})=>{
-        return(
+      cell: ({ row }) => {
+        return (
           <>
             {
-              row.original.category.map((c,index)=>{
-                return(
-                  <p key={c._id+"table"} className='shadow-md px-1 inline-block'>{c.name}</p>
+              row.original.category.map((c, index) => {
+                return (
+                  <p key={c._id + "table"} className='shadow-md px-1 inline-block'>{c.name}</p>
                 )
               })
             }
           </>
         )
-       }
+      }
     }),
-    columnHelper.accessor("_id",{
-      header : "Action",
-      cell : ({row})=>{
-        return(
+    columnHelper.accessor("_id", {
+      header: "Action",
+      cell: ({ row }) => {
+        return (
           <div className='flex items-center justify-center gap-3'>
-              <button onClick={()=>{
-                  setOpenEdit(true)
-                  setEditData(row.original)
-              }} className='p-2 bg-green-100 rounded-full hover:text-green-600'>
-                  <HiPencil size={20}/>
-              </button>
-              <button onClick={()=>{
-                setOpenDeleteConfirmBox(true)
-                setDeleteSubCategory(row.original)
-              }} className='p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600'>
-                  <MdDelete  size={20}/>
-              </button>
+            <button onClick={() => {
+              setOpenEdit(true)
+              setEditData(row.original)
+            }} className='p-2 bg-green-100 rounded-full hover:text-green-600'>
+              <HiPencil size={20} />
+            </button>
+            <button onClick={() => {
+              setOpenDeleteConfirmBox(true)
+              setDeleteSubCategory(row.original)
+            }} className='p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600'>
+              <MdDelete size={20} />
+            </button>
           </div>
         )
       }
@@ -125,11 +126,19 @@ const SubCategoryPage = () => {
             fetchData={fetchSubCategory}
           />
         )
+      },
+      {
+        openEdit &&
+        <EditSubCategory
+          data={editData}
+          close={() => setOpenEdit(false)}
+          fetchData={fetchSubCategory}
+        />
       }
       {
-          ImageURL &&
-          <ViewImage url={ImageURL} close={()=>setImageURL("")}/>
-        }
+        ImageURL &&
+        <ViewImage url={ImageURL} close={() => setImageURL("")} />
+      }
       <div className='overflow-auto w-full max-w-[95vw]'>
         <DisplayTable
           data={data}
