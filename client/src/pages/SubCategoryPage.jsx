@@ -10,9 +10,8 @@ import { MdDelete } from "react-icons/md";
 import { HiPencil } from "react-icons/hi";
 import ViewImage from "../components/ViewImage"
 import EditSubCategory from "../components/EditSubCategory"
-// import EditSubCategory from '../components/EditSubCategory'
-// import CofirmBox from '../components/CofirmBox'
-// import toast from 'react-hot-toast'
+import ConfirmBox from '../components/ConfirmBox'
+import toast from 'react-hot-toast'
 
 const SubCategoryPage = () => {
   const [openAddSubCategory, setOpenAddSubCategory] = useState(false)
@@ -111,7 +110,26 @@ const SubCategoryPage = () => {
     })
   ]
 
-  console.log(data)
+  const handleDeleteSubCategory = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.deleteSubCategory,
+        data: deleteSubCategory
+      })
+
+      const { data: responseData } = response
+
+      if (responseData.success) {
+        toast.success(responseData.message)
+        fetchSubCategory()
+        setOpenDeleteConfirmBox(false)
+        setDeleteSubCategory({ _id: "" })
+      }
+    } catch (error) {
+      AxiosToastError(error)
+    }
+  }
+
 
   return (
     <section className=''>
@@ -138,6 +156,15 @@ const SubCategoryPage = () => {
       {
         ImageURL &&
         <ViewImage url={ImageURL} close={() => setImageURL("")} />
+      }
+      {
+        openDeleteConfirmBox && (
+          <ConfirmBox
+            cancel={() => setOpenDeleteConfirmBox(false)}
+            close={() => setOpenDeleteConfirmBox(false)}
+            confirm={handleDeleteSubCategory}
+          />
+        )
       }
       <div className='overflow-auto w-full max-w-[95vw]'>
         <DisplayTable
