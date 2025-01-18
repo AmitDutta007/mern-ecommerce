@@ -141,7 +141,7 @@ const UploadProduct = () => {
                     imageLoading ?
                       <Loading /> : (
                         <>
-                          {/* <FaCloudUploadAlt size={35}/> */}
+                          <FaCloudUploadAlt size={35} />
                           <p>Upload Image</p>
                         </>
                       )
@@ -152,7 +152,7 @@ const UploadProduct = () => {
                   id='productImage'
                   className='hidden'
                   accept='image/*'
-                // onChange={handleUploadImage}
+                  onChange={handleUploadImage}
                 />
               </label>
               {/**display uploded image*/}
@@ -167,9 +167,9 @@ const UploadProduct = () => {
                           className='w-full h-full object-scale-down cursor-pointer'
                           onClick={() => setViewImageURL(img)}
                         />
-                        {/* <div onClick={() => handleDeleteImage(index)} className='absolute bottom-0 right-0 p-1 bg-red-600 hover:bg-red-600 rounded text-white hidden group-hover:block cursor-pointer'>
+                        <div onClick={() => handleDeleteImage(index)} className='absolute bottom-0 right-0 p-1 bg-red-600 hover:bg-red-600 rounded text-white hidden group-hover:block cursor-pointer'>
                           <MdDelete />
-                        </div> */}
+                        </div>
                       </div>
                     )
                   })
@@ -370,11 +370,11 @@ const UploadProduct = () => {
         </form>
       </div>
 
-      {/* {
-          ViewImageURL && (
-            <ViewImage url={ViewImageURL} close={()=>setViewImageURL("")}/>
-          )
-        } */}
+      {
+        ViewImageURL && (
+          <ViewImage url={ViewImageURL} close={() => setViewImageURL("")} />
+        )
+      }
 
       {/* {
           openAddField && (
