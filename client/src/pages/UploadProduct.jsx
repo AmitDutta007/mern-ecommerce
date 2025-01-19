@@ -6,7 +6,7 @@ import ViewImage from '../components/ViewImage';
 import { MdDelete } from "react-icons/md";
 import { useSelector } from 'react-redux'
 import { IoClose } from "react-icons/io5";
-// import AddFieldComponent from '../components/AddFieldComponent';
+import AddFieldComponent from '../components/AddFieldComponent';
 import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import AxiosToastError from '../utils/AxiosToastError';
@@ -69,6 +69,7 @@ const UploadProduct = () => {
     setImageLoading(false)
 
   }
+
   const handleDeleteImage = async (index) => {
     data.image.splice(index, 1)
     setData((preve) => {
@@ -93,6 +94,19 @@ const UploadProduct = () => {
         ...preve
       }
     })
+  }
+  const handleAddField = () => {
+    setData((preve) => {
+      return {
+        ...preve,
+        more_details: {
+          ...preve.more_details,
+          [fieldName]: ""
+        }
+      }
+    })
+    setFieldName("")
+    setOpenAddField(false)
   }
 
   return (
@@ -231,6 +245,7 @@ const UploadProduct = () => {
                 onChange={(e) => {
                   const value = e.target.value
                   const subCategory = allSubCategory.find(el => el._id === value)
+                  console.log(subCategory);
 
                   setData((preve) => {
                     return {
@@ -257,7 +272,7 @@ const UploadProduct = () => {
                       <div key={c._id + index + "productsection"} className='text-sm flex items-center gap-1 bg-blue-50 mt-2'>
                         <p>{c.name}</p>
                         <div className='hover:text-red-500 cursor-pointer'
-                        // onClick={()=>handleRemoveSubCategory(index)}
+                          onClick={() => handleRemoveSubCategory(index)}
                         >
                           <IoClose size={20} />
                         </div>
@@ -327,37 +342,40 @@ const UploadProduct = () => {
 
 
           {/**add more field**/}
-          {/* {
-                    Object?.keys(data?.more_details)?.map((k,index)=>{
-                        return(
-                          <div className='grid gap-1'>
-                            <label htmlFor={k} className='font-medium'>{k}</label>
-                            <input 
-                              id={k}
-                              type='text'
-                              value={data?.more_details[k]}
-                              onChange={(e)=>{
-                                  const value = e.target.value 
-                                  setData((preve)=>{
-                                    return{
-                                        ...preve,
-                                        more_details : {
-                                          ...preve.more_details,
-                                          [k] : value
-                                        }
-                                    }
-                                  })
-                              }}
-                              required
-                              className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
-                            />
-                          </div>
-                        )
-                    })
-                  } */}
+          {
+
+            Object?.keys(data?.more_details)?.map((k, index) => {
+              return (
+                <>
+                  <div className='grid gap-1'>
+                    <label htmlFor={k} className='font-medium'>{k}</label>
+                    <input
+                      id={k}
+                      type='text'
+                      value={data?.more_details[k]}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setData((preve) => {
+                          return {
+                            ...preve,
+                            more_details: {
+                              ...preve.more_details,
+                              [k]: value
+                            }
+                          }
+                        })
+                      }}
+                      required
+                      className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+                    />
+                  </div>
+                </>
+              )
+            })
+          }
 
           <div
-            //  onClick={()=>setOpenAddField(true)} 
+            onClick={() => setOpenAddField(true)}
             className=' hover:bg-primary-200 bg-white py-1 px-3 w-32 text-center font-semibold border border-primary-200 hover:text-neutral-900 cursor-pointer rounded'>
             Add Fields
           </div>
@@ -376,16 +394,16 @@ const UploadProduct = () => {
         )
       }
 
-      {/* {
-          openAddField && (
-            <AddFieldComponent 
-              value={fieldName}
-              onChange={(e)=>setFieldName(e.target.value)}
-              submit={handleAddField}
-              close={()=>setOpenAddField(false)} 
-            />
-          )
-        } */}
+      {
+        openAddField && (
+          <AddFieldComponent
+            value={fieldName}
+            onChange={(e) => setFieldName(e.target.value)}
+            submit={handleAddField}
+            close={() => setOpenAddField(false)}
+          />
+        )
+      }
     </section>
   )
 }
