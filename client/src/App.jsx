@@ -18,10 +18,12 @@ function App() {
   const dispatch = useDispatch()
   const location = useLocation()
 
-  const fetchUser = async () => {
-    const userData = await fetchUserDetails()
-    dispatch(setUserDetails(userData.data))
-  }
+  // const fetchUser = async () => {
+  //   const userData = await fetchUserDetails()
+  //   dispatch(setUserDetails(userData.data))
+  //   console.log(userData.data);
+    
+  // }
 
   const fetchCategory = async()=>{
     try {
@@ -59,7 +61,7 @@ function App() {
 
   
   useEffect(() => {
-    fetchUser()
+    // fetchUser()
     fetchCategory()
     fetchSubCategory()
     // fetchCartItem()

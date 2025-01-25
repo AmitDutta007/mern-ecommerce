@@ -109,6 +109,40 @@ const UploadProduct = () => {
     setOpenAddField(false)
   }
 
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    console.log("data",data)
+
+    try {
+      const response = await Axios({
+          ...SummaryApi.createProduct,
+          data : data
+      })
+      const { data : responseData} = response
+
+      if(responseData.success){
+          successAlert(responseData.message)
+          setData({
+            name : "",
+            image : [],
+            category : [],
+            subCategory : [],
+            unit : "",
+            stock : "",
+            price : "",
+            discount : "",
+            description : "",
+            more_details : {},
+          })
+
+      }
+    } catch (error) {
+        AxiosToastError(error)
+    }
+
+
+  }
+
   return (
     <section className=''>
       <div className='p-2   bg-white shadow-md flex items-center justify-between'>
@@ -116,7 +150,7 @@ const UploadProduct = () => {
       </div>
       <div className='grid p-3'>
         <form className='grid gap-4'
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         >
           <div className='grid gap-1'>
             <label htmlFor='name' className='font-medium'>Name</label>
@@ -292,7 +326,7 @@ const UploadProduct = () => {
               placeholder='Enter product unit'
               name='unit'
               value={data.unit}
-              // onChange={handleChange}
+              onChange={handleChange}
               required
               className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
             />
@@ -306,7 +340,7 @@ const UploadProduct = () => {
               placeholder='Enter product stock'
               name='stock'
               value={data.stock}
-              // onChange={handleChange}
+              onChange={handleChange}
               required
               className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
             />
@@ -320,7 +354,7 @@ const UploadProduct = () => {
               placeholder='Enter product price'
               name='price'
               value={data.price}
-              // onChange={handleChange}
+              onChange={handleChange}
               required
               className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
             />
@@ -334,7 +368,7 @@ const UploadProduct = () => {
               placeholder='Enter product discount'
               name='discount'
               value={data.discount}
-              // onChange={handleChange}
+              onChange={handleChange}
               required
               className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
             />
@@ -352,6 +386,7 @@ const UploadProduct = () => {
                     <input
                       id={k}
                       type='text'
+                      placeholder={`${k} details`}
                       value={data?.more_details[k]}
                       onChange={(e) => {
                         const value = e.target.value
