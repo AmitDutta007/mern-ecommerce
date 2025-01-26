@@ -1,6 +1,6 @@
 import ProductModel from "../models/product.model.js";
 
-export const createProductController = async(request,response)=>{
+export const createProductController = async(req,res)=>{
     try {
         const { 
             name ,
@@ -13,10 +13,10 @@ export const createProductController = async(request,response)=>{
             discount,
             description,
             more_details,
-        } = request.body 
+        } = req.body 
 
         if(!name || !image[0] || !category[0] || !subCategory[0] || !unit || !price || !description ){
-            return response.status(400).json({
+            return res.status(400).json({
                 message : "Enter required fields",
                 error : true,
                 success : false
@@ -37,7 +37,7 @@ export const createProductController = async(request,response)=>{
         })
         const saveProduct = await product.save()
 
-        return response.json({
+        return res.json({
             message : "Product Created Successfully",
             data : saveProduct,
             error : false,
@@ -45,7 +45,7 @@ export const createProductController = async(request,response)=>{
         })
 
     } catch (error) {
-        return response.status(500).json({
+        return res.status(500).json({
             message : error.message || error,
             error : true,
             success : false

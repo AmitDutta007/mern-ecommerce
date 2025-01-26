@@ -9,7 +9,7 @@ import {
     // getProductDetails,
     // searchProduct,
     // updateProductDetails
-} from '../controllers/product.controller.js'
+} from '../controllers/product.controllers.js'
 import { admin } from '../middleware/Admin.js'
 
 const productRouter = Router()
