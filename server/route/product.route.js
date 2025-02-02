@@ -5,7 +5,7 @@ import {
     // deleteProductDetails,
     // getProductByCategory,
     // getProductByCategoryAndSubCategory,
-    // getProductController,
+    getProduct,
     // getProductDetails,
     // searchProduct,
     // updateProductDetails
@@ -15,7 +15,7 @@ import { admin } from '../middleware/Admin.js'
 const productRouter = Router()
 
 productRouter.post("/create", auth, admin, createProductController)
-// productRouter.post('/get',getProductController)
+productRouter.post('/get',getProduct)
 // productRouter.post("/get-product-by-category",getProductByCategory)
 // productRouter.post('/get-pruduct-by-category-and-subcategory',getProductByCategoryAndSubCategory)
 // productRouter.post('/get-product-details',getProductDetails)
