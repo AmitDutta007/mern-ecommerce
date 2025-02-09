@@ -8,7 +8,7 @@ import {
     getProduct,
     // getProductDetails,
     // searchProduct,
-    // updateProductDetails
+    updateProductDetails
 } from '../controllers/product.controllers.js'
 import { admin } from '../middleware/Admin.js'
 
@@ -21,7 +21,7 @@ productRouter.post('/get',getProduct)
 // productRouter.post('/get-product-details',getProductDetails)
 
 //update product
-// productRouter.put('/update-product-details',auth,admin,updateProductDetails)
+productRouter.put('/update-product-details',auth,admin,updateProductDetails)
 
 //delete product
 // productRouter.delete('/delete-product',auth,admin,deleteProductDetails)

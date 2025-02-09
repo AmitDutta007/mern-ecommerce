@@ -3,7 +3,7 @@ import SummaryApi from '../common/SummaryApi'
 import AxiosToastError from '../utils/AxiosToastError'
 import Axios from '../utils/Axios'
 import Loading from '../components/Loading'
-// import ProductCardAdmin from '../components/ProductCardAdmin'
+import ProductCardAdmin from '../components/ProductCardAdmin'
 import { IoSearchOutline } from "react-icons/io5";
 // import EditProductAdmin from '../components/EditProductAdmin'
 
@@ -103,13 +103,13 @@ const ProductAdmin = () => {
 
                 <div className='min-h-[55vh]'>
                     <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4'>
-                        {/* {
+                        {
                             productData.map((p, index) => {
                                 return (
                                     <ProductCardAdmin data={p} fetchProductData={fetchProductData} />
                                 )
                             })
-                        } */}
+                        }
                     </div>
                 </div>
 
